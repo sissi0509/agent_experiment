@@ -128,9 +128,6 @@ def main():
 
     # Create marker file if all checks pass
     if all_passed:
-        os.makedirs("/root/markers", exist_ok=True)
-        with open("/root/markers/environment_verified.txt", "w") as f:
-            f.write("ENVIRONMENT_VERIFIED")
 
         print("\n" + "="*60)
         print("🎉 Environment setup completed successfully!")

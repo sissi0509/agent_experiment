@@ -6,6 +6,11 @@ Understand EVERY part of the chat completion call.
 
 import openai
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+MODEL = "gpt-4o-mini"
 
 # Initialize client
 client = openai.OpenAI(
@@ -26,18 +31,19 @@ client = openai.OpenAI(
 # - content: What they are saying
 # ==========================================
 
+
 # TODO: Read each line below carefully to understand what it does
 # Then uncomment ALL lines (remove the # symbols) and fill in the blanks:
 
-# response = client.chat.completions.create(
-#     model="___",  # TODO: Use "gpt-5.6-luna" - which AI model to use
-#     messages=[
-#         {
-#             "role": "___",     # TODO: Use "user" - you're the user speaking
-#             "content": "___"   # TODO: Use "Hello AI, please introduce yourself" - your message
-#         }
-#     ]
-# )
+response = client.chat.completions.create(
+    model=MODEL,  # TODO: Use "gpt-5.6-luna" - which AI model to use
+    messages=[
+        {
+            "role": "user",     # TODO: Use "user" - you're the user speaking
+            "content": "Hello AI, please introduce yourself"   # TODO: Use "Hello AI, please introduce yourself" - your message
+        }
+    ]
+)
 
 # ==========================================
 # REAL RESPONSE OBJECT STRUCTURE
@@ -56,7 +62,7 @@ ChatCompletion(
             )
         )
     ],
-    created=1758773976,
+    created=1758773976, 
     model='gpt-5.6-luna',
     object='chat.completion',
     usage=CompletionUsage(
@@ -77,18 +83,15 @@ try:
         print(f"\n🤖 AI said: {ai_text}")
         print(f"\n📊 Total tokens used: {response.usage.total_tokens}")
 
-        # Create marker
-        os.makedirs("/root/markers", exist_ok=True)
-        with open("/root/markers/task3_api_call_complete.txt", "w") as f:
-            f.write("SUCCESS")
+   
     else:
         print("❌ Complete the TODO above to make your first API call")
         print("\n📚 Required parameters:")
-        print("1. model: 'gpt-5.6-luna'")
+        print(f"1. model: {MODEL}")
         print("2. messages: [{'role': 'user', 'content': 'your message'}]")
 except NameError:
     print("❌ Uncomment the code above and fill in the blanks!")
     print("\n📚 Required values:")
-    print("   - model: 'gpt-5.6-luna'")
+    print(f"   - model: {MODEL}")
     print("   - role: 'user'")
     print("   - content: 'Hello AI, please introduce yourself'")

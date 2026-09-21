@@ -6,15 +6,19 @@ Learn the EXACT path to get the AI's answer from the response object.
 
 import openai
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+MODEL = "gpt-4o-mini"  # change this one line to try a different model everywhere in this file
 
 client = openai.OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),
-    base_url=os.getenv("OPENAI_API_BASE")
+    api_key=os.getenv("OPENAI_API_KEY")
 )
 
 # Make a simple API call to get a response
 response = client.chat.completions.create(
-    model="gpt-5.6-luna",
+    model=MODEL,
     messages=[{"role": "user", "content": "What is Python in one sentence?"}]
 )
 
@@ -51,9 +55,7 @@ response = client.chat.completions.create(
 # └─────────┘
 # ==========================================
 
-# TODO: Extract the AI's text response using the exact path
-# Fill in each part of the path:
-ai_text = response.___[___].___.___  # TODO: choices[0].message.content
+ai_text = response.choices[0].message.content
 
 # Display what we extracted
 print("🎯 Successfully extracted the AI's response!")
@@ -62,15 +64,15 @@ print("Question: What is Python in one sentence?")
 print("\nAI's Answer:")
 print(ai_text)
 print("="*60)
+print(f"model is {response.model}\n")
+print("="*60)
+print(f"usage is {response.usage}\n")
+print("="*60)
+print(f"time is {response.created}")
 
 # Show the magic path one more time
 print("\n🔑 THE GOLDEN PATH - Memorize this:")
 print("   response.choices[0].message.content")
 print("\n   This path works for EVERY chat completion response!")
-
-# Create marker for completion tracking
-os.makedirs("/root/markers", exist_ok=True)
-with open("/root/markers/task4_extract_complete.txt", "w") as f:
-    f.write("SUCCESS")
 
 print("\n✅ Task 4 completed! You now know how to extract AI responses!")

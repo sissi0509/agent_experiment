@@ -6,6 +6,10 @@ Learn how tokens work and calculate real business costs for AI usage.
 
 import openai
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+MODEL = "gpt-4o-mini"
 
 client = openai.OpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
@@ -15,7 +19,7 @@ client = openai.OpenAI(
 # Make an API call with a business-relevant prompt
 prompt = "Explain the benefits of using AI for customer support in a business"
 response = client.chat.completions.create(
-    model="gpt-5.6-luna",
+    model=MODEL,
     messages=[{"role": "user", "content": prompt}]
 )
 
@@ -38,9 +42,9 @@ response = client.chat.completions.create(
 # ==========================================
 
 # TODO: Extract the token counts from response.usage
-input_tokens = response.usage.___    # TODO: prompt_tokens
-output_tokens = response.usage.___   # TODO: completion_tokens
-total_tokens = response.usage.___    # TODO: total_tokens
+input_tokens = response.usage.prompt_tokens    # TODO: prompt_tokens
+output_tokens = response.usage.completion_tokens   # TODO: completion_tokens
+total_tokens = response.usage.total_tokens    # TODO: total_tokens
 
 print("📊 Token Usage Report:")
 print("="*50)
@@ -67,8 +71,8 @@ print("="*50)
 # ==========================================
 
 # GPT-4.1-mini pricing (per 1,000 tokens) - already set for you!
-input_price_per_1k = 0.0008   # That's $0.80 per million tokens
-output_price_per_1k = 0.0032  # That's $3.20 per million tokens
+input_price_per_1k = 0.00015   # That's $0.80 per million tokens
+output_price_per_1k = 0.0050  # That's $3.20 per million tokens
 
 # Calculate actual costs for this API call
 input_cost = (input_tokens / 1000) * input_price_per_1k
@@ -81,10 +85,5 @@ print(f"  Input cost:  ${input_cost:.6f} ({input_tokens} tokens)")
 print(f"  Output cost: ${output_cost:.6f} ({output_tokens} tokens)")
 print(f"  TOTAL COST:  ${total_cost:.6f}")
 print("-"*50)
-
-# Create completion marker
-os.makedirs("/root/markers", exist_ok=True)
-with open("/root/markers/task5_costs_complete.txt", "w") as f:
-    f.write("SUCCESS")
 
 print("\n✅ Task 5 completed! You now understand tokens and costs!")
