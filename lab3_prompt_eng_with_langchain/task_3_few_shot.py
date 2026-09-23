@@ -9,6 +9,9 @@ Learning Goal: Master few-shot prompting for consistent, high-quality responses.
 import os
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import FewShotPromptTemplate, PromptTemplate
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def main():
     print("🎯 Task 3: Few-Shot Prompting")
@@ -16,7 +19,7 @@ def main():
 
     # Initialize LLM
     llm = ChatOpenAI(
-        model="gpt-5.6-luna",
+        model="gpt-4o-mini",
         api_key=os.getenv("OPENAI_API_KEY"),
         base_url=os.getenv("OPENAI_API_BASE"),
         temperature=0.7
@@ -28,17 +31,17 @@ def main():
     # TODO 1: Create example input-output pairs for customer support
     examples = [
         {
-            "input": "___",  # Replace ___ with: "refund request"
-            "output": "___"  # Replace ___ with: "I understand you'd like a refund. Let me check your order details. Our refund policy allows returns within 30 days. I'll process this for you right away."
+            "input": "refund request",  # Replace ___ with: "refund request"
+            "output": "I understand you'd like a refund. Let me check your order details. Our refund policy allows returns within 30 days. I'll process this for you right away."
+        },  # Replace ___ with: "I understand you'd like a refund. Let me check your order details. Our refund policy allows returns within 30 days. I'll process this for you right away."
+        {
+            "input": "shipping delay",  # Replace ___ with: "shipping delay"
+            "output": "I apologize for the shipping delay. Let me track your package immediately. I see it's currently in transit and should arrive within 2 days. I'll apply a shipping credit to your account."  # Replace ___ with: "I apologize for the shipping delay. Let me track your package immediately. I see it's currently in transit and should arrive within 2 days. I'll apply a shipping credit to your account."
         },
         {
-            "input": "___",  # Replace ___ with: "shipping delay"
-            "output": "___"  # Replace ___ with: "I apologize for the shipping delay. Let me track your package immediately. I see it's currently in transit and should arrive within 2 days. I'll apply a shipping credit to your account."
-        },
-        {
-            "input": "___",  # Replace ___ with: "password reset"
-            "output": "___"  # Replace ___ with: "I'll help you reset your password. For security, I've sent a reset link to your registered email. The link expires in 1 hour. Please check your spam folder if you don't see it."
-        }
+            "input": "password reset",  # Replace ___ with: "password reset"
+            "output": "I'll help you reset your password. For security, I've sent a reset link to your registered email. The link expires in 1 hour. Please check your spam folder if you don't see it."
+        }  # Replace ___ with: "I'll help you reset your password. For security, I've sent a reset link to your registered email. The link expires in 1 hour. Please check your spam folder if you don't see it."
     ]
 
     print("📚 Examples loaded:")
@@ -48,7 +51,7 @@ def main():
     # TODO 2: Create the example template
     example_prompt = PromptTemplate(
         template="Customer Issue: {input}\nSupport Response: {output}",
-        input_variables=["___", "___"]  # Replace ___ with: "input", "output"
+        input_variables=["input", "output"]  # Replace ___ with: "input", "output"
     )
 
     # TODO 3: Create the few-shot prompt template
@@ -57,14 +60,14 @@ def main():
         example_prompt=example_prompt,
         prefix="You are a helpful customer support agent. Here are examples of how to respond:",
         suffix="Customer Issue: {input}\nSupport Response:",
-        input_variables=["___"]  # Replace ___ with: "input"
+        input_variables=["input"]  # Replace ___ with: "input"
     )
 
     print("\n🔄 Testing Few-Shot Prompting")
     print("-" * 40)
 
     # TODO 4: Test with a new customer issue
-    test_input = "___"  # Replace ___ with: "account locked"
+    test_input = "account locked"  # Replace ___ with: "account locked"
 
     # Format the few-shot prompt
     formatted_prompt = few_shot_prompt.format(input=test_input)
@@ -99,10 +102,7 @@ def main():
     print("  ✓ Perfect for customer service")
     print("  ✓ Reduces training time")
 
-    # Create marker for completion
-    os.makedirs("/root/markers", exist_ok=True)
-    with open("/root/markers/task3_complete.txt", "w") as f:
-        f.write("COMPLETED")
+
 
     print("\n✅ Task 3 completed! Few-shot prompting mastered!")
 

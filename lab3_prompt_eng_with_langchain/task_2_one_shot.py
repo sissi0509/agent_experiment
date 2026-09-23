@@ -9,6 +9,9 @@ Learning Goal: Master one-shot prompting for format consistency.
 import os
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def main():
     print("🎯 Task 2: One-Shot Prompting")
@@ -16,7 +19,7 @@ def main():
 
     # Initialize LLM
     llm = ChatOpenAI(
-        model="gpt-5.6-luna",
+        model="gpt-4o-mini",
         api_key=os.getenv("OPENAI_API_KEY"),
         base_url=os.getenv("OPENAI_API_BASE"),
         temperature=0.7
@@ -26,7 +29,14 @@ def main():
     print("-" * 40)
 
     # TODO 1: Provide an example policy format
-    example_policy = """___"""  # Replace ___ with: "REFUND POLICY\n1. Eligibility: Within 30 days of purchase\n2. Conditions: Product unused and in original packaging\n3. Process: Submit request via support@company.com\n4. Timeline: Refund processed within 5-7 business days\n5. Exceptions: Digital products and custom orders non-refundable"
+    example_policy = """REFUND POLICY\n
+    1. Eligibility: Within 30 days of purchase\n
+    2. Conditions: Product unused and in original packaging\n
+    3. Process: Submit request via support@company.com\n
+    4. Timeline: Refund processed within 5-7 business days\n
+    5. Exceptions: Digital products and custom orders non-refundable"""
+
+    # Replace ___ with: "REFUND POLICY\n1. Eligibility: Within 30 days of purchase\n2. Conditions: Product unused and in original packaging\n3. Process: Submit request via support@company.com\n4. Timeline: Refund processed within 5-7 business days\n5. Exceptions: Digital products and custom orders non-refundable"
 
     print("📋 Example provided:")
     print(example_policy)
@@ -34,11 +44,9 @@ def main():
     # TODO 2: Create the one-shot prompt template
     one_shot_template = PromptTemplate(
         template="""Here's an example of our policy format:
-
-{example}
-
-Now write a {policy_type} policy following this EXACT format with numbered sections:""",
-        input_variables=["___", "___"]  # Replace ___ with: "example", "policy_type"
+        {example}
+        Now write a {policy_type} policy following this EXACT format with numbered sections:""",
+        input_variables=["example", "policy"]  # Replace ___ with: "example", "policy_type"
     )
 
     print("\n🔄 Testing One-Shot Prompting")
@@ -48,7 +56,7 @@ Now write a {policy_type} policy following this EXACT format with numbered secti
     # Format the prompt with our example and new policy type
     formatted_prompt = one_shot_template.format(
         example=example_policy,
-        policy_type="___"  # Replace ___ with: "remote work"
+        policy_type="remote work"  # Replace ___ with: "remote work"
     )
 
     print(f"📤 Sending one-shot prompt for: remote work policy")
@@ -79,10 +87,6 @@ Now write a {policy_type} policy following this EXACT format with numbered secti
     print("  ✓ Perfect for policy documents")
     print("  ✓ Maintains company standards")
 
-    # Create marker for completion
-    os.makedirs("/root/markers", exist_ok=True)
-    with open("/root/markers/task2_complete.txt", "w") as f:
-        f.write("COMPLETED")
 
     print("\n✅ Task 2 completed! One-shot prompting mastered!")
 
